@@ -11,7 +11,7 @@ jobs:
       ((github.event.action == 'labeled') && 
         (github.event.label.name == 'auto-review')) ||
       ((github.event.action == 'synchronize') &&
-        contains(github.event.pull_request.labels.*.name, 'auto-review')
+        contains(github.event.pull_request.labels.*.name, 'auto-review'))
 
     steps:
       - name: Checkout repository
