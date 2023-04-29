@@ -33,4 +33,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           URL: ${{ github.event.pull_request.html_url }}
-        run: gh pr comment -b "${PR_DIFF}" "${URL}"
+        run: gh pr comment -b ${PR_DIFF} "${URL}"
