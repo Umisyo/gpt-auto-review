@@ -31,4 +31,4 @@ jobs:
       - name: Post comments
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh pr comment -F ./comments "test"
+        run: gh pr comment -b "test"
