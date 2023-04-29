@@ -1,0 +1,21 @@
+name: My Workflow
+
+on:
+  pull_request:
+    types: [opened, synchronize, labeled]
+
+jobs:
+  gpt-auto-review:
+    runs-on: ubuntu-latest
+    if: |
+      ((github.event.action == 'labeled') && 
+        (github.event.label.name == 'auto-review')) ||
+      ((github.event.action == 'synchronize') &&
+        contains(github.event.pull_request.labels.*.name, 'auto-review')
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Create Comment
+        uses: https://github.com/actions/github-script@v6
+        run: gh pr comment -F ./comments "test"
