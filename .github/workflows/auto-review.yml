@@ -29,8 +29,8 @@ jobs:
 
           echo "PR Title: $PR_TITLE"
           echo "PR Description: $PR_BODY"
-      - name: Post Comment
-        uses: github-actions-up-and-running/pr-comment@v1.0.1
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          message: 'test'
+      - name: Post comments
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          URL: ${{ github.event.pull_request.html_url }}
+        run: gh pr comment -b "test"
