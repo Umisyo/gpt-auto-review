@@ -28,7 +28,7 @@ jobs:
 
           echo "PR Title: $PR_TITLE"
           echo "PR Description: $PR_BODY"
-      - name: Setup GitHub CLI
-        uses: actions/github-script@v6
-      - name: Create Comment
+      - name: Post comments
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh pr comment -F ./comments "test"
