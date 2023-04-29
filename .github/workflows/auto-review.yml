@@ -28,11 +28,9 @@ jobs:
 
           PR_TITLE=$(echo $PR_INFO | jq -r .title)
           PR_BODY=$(echo $PR_INFO | jq -r .body)
-
-          echo "PR Title: $PR_TITLE"
-          echo "PR Description: $PR_BODY"
+          PR_DIFF=$(git diff origin/${GITHUB_BASE_REF}...origin/${GITHUB_HEAD_REF})
       - name: Post comments
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           URL: ${{ github.event.pull_request.html_url }}
-        run: gh pr comment -b "test" "${URL}"
+        run: gh pr comment -b "${PR_DIFF}" "${URL}"
