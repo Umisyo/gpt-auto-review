@@ -28,7 +28,11 @@ jobs:
 
           echo "PR Title: $PR_TITLE"
           echo "PR Description: $PR_BODY"
-      - name: Setup GitHub CLI
-        uses: actions/github-script@v6
       - name: Create Comment
-        run: gh pr comment -F ./comments "test"
+        uses: actions/github-script@v5
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const commentBody = "test";
+            const { owner, repo, number } = context.issue;
+            await github.rest.issues.createComment({ owner, repo, issue_number: number, body: commentBody });
