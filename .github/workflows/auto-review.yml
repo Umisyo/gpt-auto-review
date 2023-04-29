@@ -24,13 +24,17 @@ jobs:
       - name: Get PR info
         run: |
           PR_URL=$(echo ${{ github.event.pull_request.url }})
-          PR_INFO=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" $PR_URL)
+          PR=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" $PR_URL)
 
-          PR_TITLE=$(echo $PR_INFO | jq -r .title)
-          PR_BODY=$(echo $PR_INFO | jq -r .body)
+          PR_TITLE=$(echo $PR | jq -r .title)
+          PR_BODY=$(echo $PR | jq -r .body)
           PR_DIFF=$(git diff origin/${GITHUB_BASE_REF}...origin/${GITHUB_HEAD_REF})
+
+          echo pull_request_title: $PR_TITLE >> PR_INFO
+          echo pull_request_description: $PR_BODY >> PR_INFO
+          echo pull_request_diff: $PR_DIFF >> PR_INFO
       - name: Post comments
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           URL: ${{ github.event.pull_request.html_url }}
-        run: gh pr comment -b ${PR_DIFF} "${URL}"
+        run: gh pr comment -F PR_INFO "${URL}"
