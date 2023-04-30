@@ -32,9 +32,9 @@ jobs:
 
           echo "- pull_request_title: $PR_TITLE" >> PR_INFO.md
           echo "- pull_request_description: $PR_BODY" >> PR_INFO.md
-          printf '```%s\n%s\n%s```\n' "" "$(git diff)" "" >> PR_INFO.md
+          printf '```diff%s\n%s\n%s```\n' "" "$PR_DIFF" "" >> PR_INFO.md
       - name: Post comments
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           URL: ${{ github.event.pull_request.html_url }}
-        run: gh pr comment -F PR_INFO "${URL}"
+        run: gh pr comment -F PR_INFO.md "${URL}"
