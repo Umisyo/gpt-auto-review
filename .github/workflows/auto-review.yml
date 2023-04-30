@@ -38,9 +38,25 @@ jobs:
           echo "# $PR_TITLE" >> PR_INFO.md
           echo $'## description\n'"$PR_BODY" >> PR_INFO.md
           printf '```diff%s\n%s\n%s```\n' "" "$PR_DIFF" "" >> PR_INFO.md
-      - name: Use downloaded artifact
-        run: |
-          ./downloaded_artifact/gpt_auto_review PR_INFO.md > PR_REVIEW.md
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+
+      - name: Build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release
+
+      - name: Run gpt-auto-review
+        env:
+          GPT_API_KEY: ${{ secrets.GPT_API_KEY }}
+        run: ./target/release/gpt-auto-review PR_INFO.md > PR_REVIEW.md
+
       - name: Post comments
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
