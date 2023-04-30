@@ -21,6 +21,11 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           fetch-depth: 0
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: release_artifact
+          path: downloaded_artifact/
       - name: Get PR info
         run: |
           PR_URL=$(echo ${{ github.event.pull_request.url }})
@@ -33,8 +38,11 @@ jobs:
           echo "# $PR_TITLE" >> PR_INFO.md
           echo $'## description\n'"$PR_BODY" >> PR_INFO.md
           printf '```diff%s\n%s\n%s```\n' "" "$PR_DIFF" "" >> PR_INFO.md
+      - name: Use downloaded artifact
+        run: |
+          ./downloaded_artifact/gpt_auto_review PR_INFO.md > PR_REVIEW.md
       - name: Post comments
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           URL: ${{ github.event.pull_request.html_url }}
-        run: gh pr comment -F PR_INFO.md "${URL}"
+        run: gh pr comment -F PR_REVIEW.md "${URL}"
