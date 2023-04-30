@@ -1,4 +1,4 @@
-name: My Workflow
+name: GPT AUTO REVIEW
 
 on:
   pull_request:
