@@ -30,8 +30,8 @@ jobs:
           PR_BODY=$(echo $PR | jq -r .body)
           PR_DIFF=$(git diff origin/${GITHUB_BASE_REF}...origin/${GITHUB_HEAD_REF})
 
-          echo "- pull_request_title: $PR_TITLE" >> PR_INFO.md
-          echo "- pull_request_description: $PR_BODY" >> PR_INFO.md
+          echo "# $PR_TITLE" >> PR_INFO.md
+          echo "## description\n$PR_BODY" >> PR_INFO.md
           printf '```diff%s\n%s\n%s```\n' "" "$PR_DIFF" "" >> PR_INFO.md
       - name: Post comments
         env:
